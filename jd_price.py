@@ -27,8 +27,13 @@ def getProdName(url):
 def getprice(url):
     logging.debug('Start of getprice')
     res = requests.get(url)
-    price = json.loads(res.text)[0]['p']
-    logging.debug('price is' + price)
+    priceRaw = json.loads(res.text)[0]['p']
+    logging.debug('priceRaw is' + priceRaw)
+    priceRegex = re.compile(r'\d+\.?\d*')
+    mo = priceRegex.search(priceRaw)
+    price = mo.group()
+    logging.debug('After Regex the price is ' + price)
+
     return price
 
 
