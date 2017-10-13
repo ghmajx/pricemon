@@ -10,13 +10,14 @@ if len(sys.argv) < 2:
 productid = sys.argv[1]
 nameUrl = 'https://item.jd.com/' + productid + '.html'
 priceUrl = 'https://p.3.cn/prices/mgets?skuIds=J_' + productid
+kv = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.52 Safari/537.36'}
 logging.debug('The name url is ' + nameUrl + '\n' +
               'The price url is ' + priceUrl)
 
 
 def getProdName(url):
     logging.debug('Start of getProdName')
-    res = requests.get(url)
+    res = requests.get(url, headers=kv)
     jdSoup = bs4.BeautifulSoup(res.text, "html.parser")
     jdElem = jdSoup.select('.sku-name')
     prodName = jdElem[0].getText().strip()
@@ -26,7 +27,7 @@ def getProdName(url):
 
 def getprice(url):
     logging.debug('Start of getprice')
-    res = requests.get(url)
+    res = requests.get(url, headers=kv)
     priceRaw = json.loads(res.text)[0]['p']
     logging.debug('priceRaw is' + priceRaw)
     priceRegex = re.compile(r'\d+\.?\d*')

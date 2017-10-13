@@ -9,13 +9,14 @@ if len(sys.argv) < 2:
     sys.exit()
 productid = sys.argv[1]
 url = 'https://www.amazon.com/gp/product/' + productid
+kv = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.52 Safari/537.36'}
 print(url)
 
 
 def getProdInfo(url):
     logging.debug('Start of getProdInfo')
     prodInfo = {}
-    res = requests.get(url)
+    res = requests.get(url, headers=kv)
     amazonSoup = bs4.BeautifulSoup(res.text, "html.parser")
     amzElem = amazonSoup.find_all(id=re.compile(r'productTitle$|priceblock_ourprice$'))
     # Version 0.3:
