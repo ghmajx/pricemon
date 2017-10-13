@@ -41,7 +41,7 @@ while True:
         prodName = productInfo['prodName']
         msg = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S') + ' - ' + prodName + ' - ' + price
         logging.debug("The msg is " + msg)
-        if int(price) < 440:
+        if float(price) < 440:
             requests.post('https://api.telegram.org/botbid/sendMessage?chat_id=uid&text=' + msg
                           + ' - ' + url)
         time.sleep(15)
