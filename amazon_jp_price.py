@@ -18,13 +18,14 @@ def getProdInfo(url):
     res = requests.get(url)
     amazonSoup = bs4.BeautifulSoup(res.text, "html.parser")
     amzElem = amazonSoup.find_all(id=re.compile(r'productTitle$|priceblock_ourprice$'))
-    price = amzElem[1].getText()
-    priceDecimal = ''
-    for i in price:
-        if i.isdecimal():
-            priceDecimal += i
+    # Version 0.3:
+    priceRaw = amzElem[1].getText()
+    priceRegex = re.compile(r'\d+\.?\d*')
+    mo = priceRegex.search(priceRaw)
+    price = mo.group()
+    logging.debug('After Regex the price is ' + price)
 
-    prodInfo['price'] = priceDecimal
+    prodInfo['price'] = price
     logging.debug('product price is ' + prodInfo['price'])
     prodName = amzElem[0].getText().strip()
 
