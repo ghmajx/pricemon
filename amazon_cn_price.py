@@ -10,6 +10,7 @@ if len(sys.argv) < 2:
 productid = sys.argv[1]
 url = 'https://www.amazon.cn/dp/' + productid
 kv = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.52 Safari/537.36'}
+prevPrice = 10000000
 print(url)
 
 
@@ -42,9 +43,10 @@ while True:
         prodName = productInfo['prodName']
         msg = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S') + ' - ' + prodName + ' - ' + price
         logging.debug("The msg is " + msg)
-        if float(price) < 440:
+        if float(price) < 440 and prevPrice > float(price):
             requests.post('https://api.telegram.org/botbid/sendMessage?chat_id=uid&text=' + msg
                           + ' - ' + url)
+			prevPrice = float(price)
         time.sleep(15)
     except Exception as e:
         print(e)

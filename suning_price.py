@@ -10,6 +10,7 @@ productid = sys.argv[1]
 nameUrl = 'https://product.suning.com/0000000000/' + productid + '.html'
 priceUrl = 'https://pas.suning.com/nspcsale_0_000000000%s_000000000%s_0000000000_10_010_0100101.html' % (productid,productid)
 kv = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.52 Safari/537.36'}
+prevPrice = 10000000
 logging.debug('The name url is ' + nameUrl +'\n' +
               'The price url is ' + priceUrl)
 
@@ -40,10 +41,11 @@ while True:
         prodName = getProdName(nameUrl)
         msg = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S') + ' - ' + prodName + ' - ' + price
         logging.debug('The msg is ' + msg)
-        if float(price) < 8000:
+        if float(price) < 8000 and prevPrice > float(price):
             requests.post(
                 'https://api.telegram.org/botbid/sendMessage?chat_id=uid&text=' + msg
                 + ' - ' + nameUrl)
+			prevPrice = float(price)
         time.sleep(100)
     except Exception as e:
         print(e)
