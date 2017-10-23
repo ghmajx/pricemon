@@ -1,2 +1,2 @@
 # pricemon
-price monitor for jd.com and amazon
+Some useful python programs.
