@@ -22,9 +22,8 @@ def getProdInfo(url):
     amzElem = amazonSoup.find_all(id=re.compile(r'productTitle$|priceblock_ourprice$'))
     # Version 0.3:
     priceRaw = amzElem[1].getText()
-    priceRegex = re.compile(r'\d+\.?\d*')
-    mo = priceRegex.search(priceRaw)
-    price = mo.group()
+    priceRegex = re.compile(r'[^\d.]+')
+    price = priceRegex.sub('', priceRaw)
     logging.debug('After Regex the price is ' + price)
 
     prodInfo['price'] = price
